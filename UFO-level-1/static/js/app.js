@@ -2,7 +2,7 @@
 var tableData = data;
 
 // Get a reference to the table body
-var tbody = d3.select("tbody");
+var tbody = d3.select("#UFOtbody");
 
 // Console.log the data from data.js
 console.log(data);
@@ -26,7 +26,7 @@ console.log(data);
 // Cool arrow function solution:
 
 data.forEach((alienReport) => {
-    var row = tbody.append("tr");
+    var row = tbody.append("tr").attr("class", "ephemeral");
     Object.entries(alienReport).forEach(([key, value]) => {
       var cell = row.append("td");
       cell.text(value);
@@ -41,17 +41,22 @@ var inputField = d3.select("#datetime");
 
 // click handler signals click was registered w/ console text
 button.on("click", function() {
-  console.log("new search date incoming!");
-});
-
-// triggering a change event to filter the table when a new date is entered
-// logs the input date for testing purposes
-inputField.on("change", function() {
-  var inputDate = d3.event.target.value;
-  console.log(inputDate);
-
-  var filteredData = data.filter(datum => datum.datetime === inputDate);
-
-
-//   console.log(filteredData);
+    console.log("new search date incoming!");
+    var inputDate = inputField.property("value");
+    // logs the input date for testing purposes
+    console.log("inputDate", inputDate);
+    // created a variable to hold all objects that meet the filtering criteria
+    console.log("data", data);
+    var filteredData = data.filter(datum => datum.datetime === inputDate);
+    console.log("filteredData", filteredData);
+    // clears all previous table entries
+    d3.selectAll(".ephemeral").remove();
+  
+    filteredData.forEach((alienReport) => {
+        var row = tbody.append("tr").attr("class", "ephemeral");
+        Object.entries(alienReport).forEach(([key, value]) => {
+            var cell = row.append("td");
+            cell.text(value);
+        });
+    });
 });
